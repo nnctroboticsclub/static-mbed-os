@@ -35,16 +35,15 @@ file(READ
 )
 
 file(READ
-  ${StaticMbedOSInternalRoot}/link-libraries.txt
-  STATIC_MBED_OS_LINK_LIBRARIES
-)
-string(REPLACE "\n" ";" STATIC_MBED_OS_LINK_LIBRARIES ${STATIC_MBED_OS_LINK_LIBRARIES})
-
-file(READ
   ${StaticMbedOSInternalRoot}/link-options.txt
   STATIC_MBED_OS_LINK_OPTIONS
 )
 string(REPLACE "\n" ";" STATIC_MBED_OS_LINK_OPTIONS ${STATIC_MBED_OS_LINK_OPTIONS})
+
+file(READ
+  ${StaticMbedOSInternalRoot}/mbed-located-at.txt
+  MBED_OS_ROOT
+)
 
 
 include(FindPackageHandleStandardArgs)
@@ -74,16 +73,9 @@ if(StaticMbedOSInternal_FOUND AND NOT TARGET StaticMbedOSInternal)
     ${STATIC_MBED_OS_COMPILE_OPTIONS}
   )
 
-  target_link_libraries(StaticMbedOSInternal INTERFACE
-    ${STATIC_MBED_OS_LINK_LIBRARIES}
-    # ${StaticMbedOSInternalAllocWrappers}
-  )
-
   target_link_options(StaticMbedOSInternal INTERFACE
     ${STATIC_MBED_OS_LINK_OPTIONS}
   )
-
-  print_target_properties(StaticMbedOSInternal)
 
   set_target_properties(StaticMbedOSInternal PROPERTIES
     BUILD_WITH_INSTALL_RPATH OFF

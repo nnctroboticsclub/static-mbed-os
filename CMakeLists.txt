@@ -25,12 +25,12 @@ install(
 print_target_properties(mbed-os)
 
 # ---- Install Headers
+get_target_property(compile_options mbed-os INTERFACE_COMPILE_OPTIONS)
+file(WRITE ${CMAKE_BINARY_DIR}/compile-options.txt "${compile_options}")
+
 file(GENERATE
   OUTPUT ${CMAKE_BINARY_DIR}/includes.txt
   CONTENT "$<TARGET_PROPERTY:mbed-os,INTERFACE_INCLUDE_DIRECTORIES> $<TARGET_PROPERTY:mbed-core-flags,INTERFACE_INCLUDE_DIRECTORIES>"
-)
-file(WRITE ${CMAKE_BINARY_DIR}/compile-options.txt
-  "$<TARGET_PROPERTY:mbed-os,INTERFACE_COMPILE_OPTIONS>"
 )
 file(GENERATE
   OUTPUT ${CMAKE_BINARY_DIR}/definitions.txt
@@ -44,6 +44,10 @@ file(GENERATE
   OUTPUT ${CMAKE_BINARY_DIR}/link-options.txt
   CONTENT "$<JOIN:$<TARGET_PROPERTY:mbed-os,INTERFACE_LINK_OPTIONS>,\n>"
 )
+file(GENERATE
+  OUTPUT ${CMAKE_BINARY_DIR}/mbed-located-at.txt
+  CONTENT "${mbed-os_SOURCE_DIR}"
+)
 
 install(
   FILES
@@ -52,6 +56,8 @@ install(
     ${CMAKE_BINARY_DIR}/includes.txt
     ${CMAKE_BINARY_DIR}/link-libraries.txt
     ${CMAKE_BINARY_DIR}/link-options.txt
+    ${CMAKE_BINARY_DIR}/mbed-located-at.txt
+    ${CMAKE_BINARY_DIR}/mbed_config.cmake
   DESTINATION share/cmake/mbed-os@3297bae
 )
 
