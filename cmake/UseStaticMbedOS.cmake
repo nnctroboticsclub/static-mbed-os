@@ -7,6 +7,9 @@ set(MBED_TOOLCHAIN GCC_ARM)
 include(${StaticMbedOSInternalRoot}/mbed_config.cmake)
 include(mbed_toolchain)
 
+set(CMAKE_OBJCOPY /usr/bin/arm-none-eabi-objcopy)
+set(CMAKE_OBJDUMP /usr/bin/arm-none-eabi-objdump)
+
 function(static_mbed_os_app_target target)
   target_link_options(${target} PRIVATE "-T" "${StaticMbedOSInternalRoot}/linker_script.ld")
   set_property(TARGET ${target} APPEND PROPERTY LINK_DEPENDS ${StaticMbedOSInternalRoot}/linker_script.ld)
