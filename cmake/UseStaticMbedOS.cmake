@@ -39,7 +39,7 @@ function(static_mbed_os_app_target target)
   )
 
   add_custom_target(upload_${target}
-    COMMAND sudo -E st-flash --connect-under-reset $FLASH_ARGS --format ihex write $<TARGET_FILE_BASE_NAME:${target}>.hex
+    COMMAND sudo -E bash -c 'st-flash --connect-under-reset $$FLASH_ARGS --format ihex write $<TARGET_FILE_BASE_NAME:${target}>.hex'
     DEPENDS ${target}
     COMMENT "Uploading ${target}.bin to device"
     USES_TERMINAL
