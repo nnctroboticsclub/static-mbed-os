@@ -79,10 +79,6 @@ if(StaticMbedOSInternal_FOUND AND NOT TARGET StaticMbedOSInternal)
 
   set_target_properties(StaticMbedOSInternal PROPERTIES
     BUILD_WITH_INSTALL_RPATH OFF
-    CXX_EXTENSIONS TRUE
-    CXX_STANDARD 17
-    C_EXTENSIONS TRUE
-    C_STANDARD 11
     EXCLUDE_FROM_ALL TRUE
     LINK_LIBRARIES "mbed-nucleo-f446re;mbed-core-flags;mbed-core-sources;mbed-rtos-flags;mbed-rtos-sources;mbed-stm32f446xe;mbed-stm32f4;mbed-stm;mbed-stm32f4cube-fw;mbed-cmsis-cortex-m"
   )
