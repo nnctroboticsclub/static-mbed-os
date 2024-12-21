@@ -7,6 +7,8 @@ set(MBED_TOOLCHAIN GCC_ARM)
 include(${StaticMbedOSInternalRoot}/mbed_config.cmake)
 include(mbed_toolchain)
 
+string(REPLACE " -Wl,--cref" "" CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
+
 set(CMAKE_OBJCOPY /usr/bin/arm-none-eabi-objcopy)
 set(CMAKE_OBJDUMP /usr/bin/arm-none-eabi-objdump)
 
