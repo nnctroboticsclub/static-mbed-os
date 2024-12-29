@@ -1,0 +1,11 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+foreach(dep @DEPS@)
+  string(REGEX REPLACE "\\$<LINK_ONLY:([^>]*)>" "\\1" dep ${dep})
+  find_dependency(${dep})
+endforeach()
+
+include("${CMAKE_CURRENT_LIST_DIR}/@DEP@.cmake")
+
+check_required_components(Spix)

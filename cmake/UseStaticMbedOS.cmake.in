@@ -1,0 +1,22 @@
+find_package(static-mbed-os-@MBED_TARGET@ REQUIRED)
+
+set(MBED_OS_ROOT /usr/arm-none-eabi/src/mbed-ce/src)
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
+  ${MBED_OS_ROOT}/tools/cmake
+)
+include(@CMAKE_BINARY_DIR@/mbed_config.cmake)
+include(mbed_toolchain)
+
+string(REPLACE " -Wl,--cref" "" CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
+
+set(CMAKE_OBJCOPY /usr/bin/arm-none-eabi-objcopy)
+set(CMAKE_OBJDUMP /usr/bin/arm-none-eabi-objdump)
+
+include(StaticMbedOSTransformers)
+function(static_mbed_os_app_target_@mbed_target@ target)
+  target_link_options(${target} PRIVATE "-T" "@linker_script@")
+  set_property(TARGET ${target} APPEND PROPERTY LINK_DEPENDS "@linker_script@")
+
+  static_mbed_os_transform_rules(${target})
+endfunction()
