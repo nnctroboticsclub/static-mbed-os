@@ -10,7 +10,7 @@ $(BUILD)/build.ninja: CMakeLists.txt
 		-DCMAKE_BUILD_TYPE=Develop \
 		-DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
 		-DMBED_TARGET=$(TARGET) \
-		-DCMAKE_INSTALL_PREFIX=/usr/arm-none-eabi/local \
+		-DCMAKE_INSTALL_PREFIX=/usr/arm-none-eabi \
 		-B . -S ../../ -G Ninja
 
 .PHONY: clean

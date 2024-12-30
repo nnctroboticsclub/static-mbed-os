@@ -9,15 +9,15 @@ set(CMAKE_INSTALL_MESSAGE LAZY)
 set(MBED_APP_JSON_PATH mbed_app.json)
 set(MBED_TOOLCHAIN GCC_ARM)
 
-include(MbedCE)
 include(TargetDumper)
 include(DependencyFinder)
+include(MbedCE)
+string(REPLACE " -Wl,--cref" "" CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
 
 project(static-mbed-os)
 
 # ----- Target Installer
 include(CMakePackageConfigHelpers)
-
 
 function(install_target dep)
   install(TARGETS ${dep}
@@ -138,5 +138,19 @@ unset(mbed_target)
 install(
   FILES
     ${CMAKE_CURRENT_BINARY_DIR}/UseStaticMbedOS-${MBED_TARGET}.cmake
+  DESTINATION share/cmake
+)
+
+
+configure_file(
+  cmake/StaticMbedOSToolchain.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/StaticMbedOSToolchain-${MBED_TARGET}.cmake
+  @ONLY
+)
+
+install(
+  FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/StaticMbedOSToolchain-${MBED_TARGET}.cmake
+    cmake/StaticMbedOSToolchain.cmake
   DESTINATION share/cmake
 )
