@@ -12,7 +12,7 @@ set(MBED_TOOLCHAIN GCC_ARM)
 include(TargetDumper)
 include(DependencyFinder)
 include(MbedCE)
-string(REPLACE " -Wl,--cref" "" CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
+string(REPLACE " -Wl,--cref" "" CMAKE_EXE_LINKER_FLAGS_INIT "${CMAKE_EXE_LINKER_FLAGS_INIT}")
 
 project(static-mbed-os)
 
