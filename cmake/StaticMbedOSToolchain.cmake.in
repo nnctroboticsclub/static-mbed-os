@@ -1,6 +1,3 @@
-set(CMAKE_SYSTEM_NAME Generic)
-set(CMAKE_CROSSCOMPILING TRUE)
-
 set(CMAKE_C_FLAGS_DEBUG "" CACHE STRING "" FORCE)
 set(CMAKE_C_FLAGS_RELEASE "" CACHE STRING "" FORCE)
 set(CMAKE_C_FLAGS_RELWITHDEBINFO "" CACHE STRING "" FORCE)
@@ -25,19 +22,7 @@ set(CMAKE_ASM_USE_RESPONSE_FILE_FOR_LIBRARIES 1)
 set(CMAKE_C_USE_RESPONSE_FILE_FOR_LIBRARIES 1)
 set(CMAKE_CXX_USE_RESPONSE_FILE_FOR_LIBRARIES 1)
 
-#* ------ Toolchain Configuration ------
-set(CMAKE_C_COMPILER arm-none-eabi-gcc CACHE FILEPATH "C Compiler")
-set(CMAKE_CXX_COMPILER arm-none-eabi-g++ CACHE FILEPATH "CXX Compiler")
-set(CMAKE_ASM_COMPILER arm-none-eabi-gcc CACHE FILEPATH "ASM Compiler")
-set(GCC_ELF2BIN "arm-none-eabi-objcopy")
-set_property(GLOBAL PROPERTY ELF2BIN ${GCC_ELF2BIN})
-
-set(CMAKE_C_COMPILER_WORKS 1)
-set(CMAKE_CXX_COMPILER_WORKS 1)
-set(CMAKE_ASM_COMPILER_WORKS 1)
-
-set(CMAKE_OBJCOPY /usr/bin/arm-none-eabi-objcopy)
-set(CMAKE_OBJDUMP /usr/bin/arm-none-eabi-objdump)
+include(GccArmToolchain)
 
 #* ------ Standard Configuration ------
 set(CMAKE_C_STANDARD 11)
