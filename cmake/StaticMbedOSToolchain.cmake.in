@@ -1,3 +1,8 @@
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
+  /usr/arm-none-eabi/share/cmake
+  /usr/arm-none-eabi/lib/cmake
+)
+
 set(CMAKE_C_FLAGS_DEBUG "" CACHE STRING "" FORCE)
 set(CMAKE_C_FLAGS_RELEASE "" CACHE STRING "" FORCE)
 set(CMAKE_C_FLAGS_RELWITHDEBINFO "" CACHE STRING "" FORCE)
