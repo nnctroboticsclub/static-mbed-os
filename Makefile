@@ -6,11 +6,11 @@ all: build
 
 $(BUILD)/build.ninja: CMakeLists.txt
 	[ -d $(BUILD) ] || mkdir -p $(BUILD)
-	cd $(BUILD); cmake \
+	$(shell which cmake) \
 		-DCMAKE_BUILD_TYPE=Develop \
 		-DMBED_TARGET=$(TARGET) \
 		-DCMAKE_INSTALL_PREFIX=/usr/arm-none-eabi \
-		-B . -S ../../ -G Ninja
+		-B $(BUILD) -S . -G Ninja
 
 .PHONY: clean
 clean:
@@ -21,9 +21,9 @@ rebuild: clean build
 
 .PHONY: build
 build: $(BUILD)/build.ninja
-	cd $(BUILD); ninja -j 12
+	ninja -C $(BUILD) -j 12
 
 .PHONY: install
 install: $(BUILD)/build.ninja
-	cd $(BUILD); ninja -j 12
-	cd $(BUILD); sudo ninja -j 12 install
+	ninja -C $(BUILD) -j 12
+	sudo ninja -C $(BUILD) -j 12 install

@@ -33,7 +33,7 @@ target_link_libraries(${static_mbed_os_target_name} PUBLIC mbed-os)
 
 list_dep_targets(${static_mbed_os_target_name} mbed_os_dependencies)
 
-set(all_includes "")
+set(include_files "")
 foreach(dep ${mbed_os_dependencies})
   if(NOT TARGET ${dep})
     continue()
@@ -45,41 +45,32 @@ foreach(dep ${mbed_os_dependencies})
   endif()
 
   foreach(include ${includes})
-    list(APPEND all_includes ${include})
+    if (IS_DIRECTORY ${include})
+      file(GLOB files "${include}/*.h" "${include}/*.hpp")
+      foreach(file ${files})
+        # If ${file} starts with '/' fullpath = ${file}, else fullpath = ${include}/${file}
+        string(FIND ${file} "/" pos)
+        if (pos EQUAL 0)
+          set(fullpath ${file})
+        else()
+          string(REPLACE "/" "${CMAKE_CURRENT_SOURCE_DIR}/" fullpath ${file})
+        endif()
+
+        if (EXISTS ${fullpath})
+          list(APPEND include_files "${fullpath}")
+        endif()
+      endforeach()
+    endif()
   endforeach()
 endforeach()
 
-set(remove_list "")
-foreach(include ${all_includes})
-  if (NOT IS_DIRECTORY ${include})
-    list(APPEND remove_list ${include})
-  endif()
-endforeach()
+# Unique include files
+list(REMOVE_DUPLICATES include_files)
 
-foreach(include ${remove_list})
-  list(REMOVE_ITEM all_includes ${include})
-endforeach()
-
-# Includes to copy
-set(includes_to_copy "")
-foreach(include ${all_includes})
-  if (${include_path} MATCHES "mbed-os")
-    list(APPEND includes_to_copy ${include})
-    list(REMOVE_ITEM all_includes ${include})
-  endif()
-endforeach()
-
-foreach(include ${remove_list})
-  list(REMOVE_ITEM all_includes ${include})
-endforeach()
-
-# Copy install
-foreach(include ${includes_to_copy})
-  install(
-    DIRECTORY ${include_path}
-    DESTINATION include/mbed-os/generated-${MBED_TARGET}
-  )
-endforeach()
+install(
+  FILES ${include_files}
+  DESTINATION include/StaticMbedOS@${MBED_TARGET}
+)
 
 # Install archive
 install(
@@ -92,8 +83,7 @@ install(
 # ----- StaticMbedOSToolchain
 get_target_property(compile_options mbed-os INTERFACE_COMPILE_OPTIONS)
 set(include_directories
-  ${all_includes}
-  ${CMAKE_INSTALL_PREFIX}/include/mbed-os/generated-${MBED_TARGET}
+  ${CMAKE_INSTALL_PREFIX}/include/StaticMbedOS@${MBED_TARGET}
 )
 
 get_target_property(compile_definitions mbed-os INTERFACE_COMPILE_DEFINITIONS)

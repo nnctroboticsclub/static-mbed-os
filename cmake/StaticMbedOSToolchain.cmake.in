@@ -62,7 +62,7 @@ if (NOT TARGET StaticMbedOS_)
 endif()
 
 if(NOT TARGET StaticMbedOS)
-  add_library(StaticMbedOS INTERFACE)
+  add_library(StaticMbedOS INTERFACE IMPORTED)
   target_link_libraries(StaticMbedOS INTERFACE StaticMbedOS_)
   target_link_options(StaticMbedOS INTERFACE "SHELL:-Wl,--whole-archive $<TARGET_FILE:StaticMbedOS_> -Wl,--no-whole-archive")
 endif()
