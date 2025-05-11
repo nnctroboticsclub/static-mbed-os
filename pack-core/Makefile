@@ -1,26 +1,11 @@
-TARGET?=NUCLEO_F446RE
-BUILD?=BUILD/${TARGET}
-DIST?=BUILD/dist
+BUILD?=../BUILD/Core
+DIST?=../BUILD/dist
 
-.PHONY: pack-all
-pack-all:
-	$(MAKE) pack-core
-	$(MAKE) pack TARGET=NUCLEO_F446RE
-	$(MAKE) pack TARGET=NUCLEO_F303K8
-
-.PHONY: clean-all
-clean-all:
-	rm -rf BUILD
-
-.PHONY: pack-core
-pack-core:
-	$(MAKE) -C pack-core pack
 
 $(BUILD)/build.ninja: CMakeLists.txt
 	[ -d $(BUILD) ] || mkdir -p $(BUILD)
 	$(shell which cmake) \
 		-DCMAKE_BUILD_TYPE=Develop \
-		-DMBED_TARGET=$(TARGET) \
 		-DCMAKE_INSTALL_PREFIX=/usr/arm-none-eabi \
 		-DCPACK_PACKAGING_INSTALL_PREFIX=/usr/arm-none-eabi \
 		-B $(BUILD) -S . -G Ninja
@@ -47,9 +32,3 @@ pack: $(BUILD)/build.ninja
 
 	[ -d $(DIST) ] || mkdir -p $(DIST)
 	cp $(BUILD)/dist/*.deb $(BUILD)/dist/*.tar.gz $(DIST)
-
-
-
-.PHONY: test
-test:
-	$(MAKE) build >a 2>&1
