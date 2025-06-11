@@ -48,6 +48,9 @@ pack: $(BUILD)/build.ninja
 	[ -d $(DIST) ] || mkdir -p $(DIST)
 	cp $(BUILD)/dist/*.deb $(BUILD)/dist/*.tar.gz $(DIST)
 
+.PHONY: push
+push:
+	curl -X POST "$(ROBO_EP)/api/deb/upload?group=mbed" -F "file=@$(F)"
 
 
 .PHONY: test

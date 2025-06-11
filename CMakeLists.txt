@@ -14,7 +14,7 @@ include(DependencyFinder)
 include(MbedCE)
 string(REPLACE " -Wl,--cref" "" CMAKE_EXE_LINKER_FLAGS_INIT "${CMAKE_EXE_LINKER_FLAGS_INIT}")
 
-project(static-mbed-os)
+project(static-mbed-os VERSION 1.0.2 LANGUAGES CXX)
 
 # ----- Target Installer
 include(CMakePackageConfigHelpers)
@@ -22,7 +22,6 @@ include(CMakePackageConfigHelpers)
 
 # ----- Target Names
 set(static_mbed_os_target_name "static-mbed-os-${MBED_TARGET}")
-set(mbed_generated_header_target_name "mbed-generated-header-${MBED_TARGET}")
 
 # ----- Target ${static_mbed_os_target_name}
 
@@ -157,6 +156,13 @@ install(
 )
 #* CMake scripts
 
+# Generated config
+install(
+  DIRECTORY ${CMAKE_BINARY_DIR}/mbed-ce/generated-headers/mbed-target-config.h
+  DESTINATION include/StaticMbedOS@${MBED_TARGET}
+  FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
+)
+
 # ----- StaticMbedOSToolchain
 get_target_property(compile_options_ mbed-os INTERFACE_COMPILE_OPTIONS)
 set(compile_options "")
@@ -195,8 +201,14 @@ set(CPACK_PACKAGE_CONTACT "syoch64@gmail.com")
 set(CPACK_GENERATOR "DEB;TGZ")
 
 # deb specific
+# MBED_TARGET_LOWER = MBED_TARGET.lower()
+string(TOLOWER ${MBED_TARGET} MBED_TARGET_LOWER)
+
+set(CPACK_DEBIAN_PACKAGE_NAME "static-mbed-os-${MBED_TARGET_LOWER}")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "syoch")
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "StaticMbedOS-Core")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "static-mbed-os-core (>=1.0.0)")
+set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "StaticMbedOS for ${MBED_TARGET}")
+set(CPACK_DEBIAN_PACKAGE_SECTION "libs")
 
 include(InstallRequiredSystemLibraries)
 include(CPack)
