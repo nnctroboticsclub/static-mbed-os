@@ -1,12 +1,14 @@
 {
-  python311Packages,
+  # Python
+  buildPythonPackage,
+  fetchPypi,
 }:
-python311Packages.buildPythonPackage {
+buildPythonPackage {
   pname = "click_8_0_4";
   version = "8.0.4";
   format = "wheel";
 
-  src = python311Packages.fetchPypi {
+  src = fetchPypi {
     pname = "click";
     version = "8.0.4";
     format = "wheel";

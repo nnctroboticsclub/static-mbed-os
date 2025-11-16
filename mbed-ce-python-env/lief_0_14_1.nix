@@ -1,14 +1,18 @@
 {
-  python311Packages,
+  # Nixpkgs
   stdenv,
   autoPatchelfHook,
+
+  # Python
+  buildPythonPackage,
+  fetchPypi,
 }:
-python311Packages.buildPythonPackage {
+buildPythonPackage {
   pname = "lief_0_14_1";
   version = "3.12.0";
   format = "wheel";
 
-  src = python311Packages.fetchPypi {
+  src = fetchPypi {
     pname = "lief";
     version = "0.14.1";
     format = "wheel";

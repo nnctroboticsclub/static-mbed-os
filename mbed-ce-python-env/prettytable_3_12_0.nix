@@ -1,7 +1,14 @@
 {
-  python311Packages,
+  # Python
+  buildPythonPackage,
+  wcwidth,
+  hatchling,
+  hatch-vcs,
+
+  # Modules
+  setuptools_69_5_1,
 }:
-python311Packages.buildPythonPackage {
+buildPythonPackage {
   pname = "prettytable_3_12_0";
   version = "3.12.0";
 
@@ -12,11 +19,11 @@ python311Packages.buildPythonPackage {
   };
   pyproject = true;
   propagatedBuildInputs = [
-    python311Packages.setuptools
-    python311Packages.wcwidth
+    setuptools_69_5_1
+    wcwidth
   ];
   build-system = [
-    python311Packages.hatchling
-    python311Packages.hatch-vcs
+    hatchling
+    hatch-vcs
   ];
 }

@@ -30,7 +30,7 @@ set(static_mbed_os_target_name "static-mbed-os-${MBED_TARGET}")
 
 # ----- Target ${static_mbed_os_target_name}
 
-add_library(${static_mbed_os_target_name} STATIC source/mbed-os.cpp)
+add_library(${static_mbed_os_target_name} STATIC mbed-os.cpp)
 target_link_libraries(${static_mbed_os_target_name} PUBLIC mbed-os)
 
 # All includes
@@ -186,7 +186,7 @@ list(APPEND compile_definitions "__MBED__=1")
 get_target_property(link_options mbed-os INTERFACE_LINK_OPTIONS)
 
 configure_file(
-  cmake/StaticMbedOSToolchain.cmake.in
+  StaticMbedOSToolchain.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/StaticMbedOSToolchain-${MBED_TARGET}.cmake
   @ONLY
 )

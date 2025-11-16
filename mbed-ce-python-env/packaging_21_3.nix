@@ -1,12 +1,14 @@
 {
-  python311Packages,
+  # Python
+  buildPythonPackage,
+  fetchPypi,
 }:
-python311Packages.buildPythonPackage {
+buildPythonPackage {
   pname = "packaging_21_3";
   version = "21.3";
   format = "wheel";
 
-  src = python311Packages.fetchPypi {
+  src = fetchPypi {
     pname = "packaging";
     version = "21.3";
     format = "wheel";

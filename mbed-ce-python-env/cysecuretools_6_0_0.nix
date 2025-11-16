@@ -1,25 +1,38 @@
 {
-  python311Packages,
+  # Python
+  buildPythonPackage,
+  fetchPypi,
+  intelhex,
+  python-jose,
+  jsonschema,
+  cbor,
+  pip,
+  pyparsing,
 
+  # Modules
   cryptography_36_0_1,
   click_8_0_4,
   packaging_21_3,
   lief_0_14_1,
 }:
-python311Packages.buildPythonPackage {
-  pname = "cysecuretools";
+buildPythonPackage {
+  pname = "cysecuretools_6_0_0";
   version = "6.0.0";
-  format = "setuptools";
+  format = "wheel";
 
-  src = fetchGit {
-    url = "https://github.com/Infineon/cysecuretools";
-    ref = "refs/tags/release-v6.0.0";
-    rev = "00a8cc2d325f4ade9313b955b4adb33aec6fc092";
+  src = fetchPypi {
+    pname = "cysecuretools";
+    version = "6.0.0";
+    format = "wheel";
+    dist = "py3";
+    python = "py3";
+    abi = "none";
+    platform = "any";
+
+    sha256 = "04s3qypf83jilzs3p8781j0x04w5hrr9cbcc5izvdxx588qxcmqf";
   };
 
-  patches = [
-    ./cysecuretools_setup.py.patch
-  ];
+  # patches = [./cysecuretools_setup.py.patch];
 
   nativeBuildInputs = [
     cryptography_36_0_1
@@ -27,14 +40,13 @@ python311Packages.buildPythonPackage {
   ];
 
   dependencies = [
-    python311Packages.setuptools
-    python311Packages.intelhex
-    python311Packages.python-jose
-    python311Packages.jsonschema
-    python311Packages.cbor
+    intelhex
+    python-jose
+    jsonschema
+    cbor
     packaging_21_3
     lief_0_14_1
-    python311Packages.pip
-    python311Packages.pyparsing
+    pip
+    pyparsing
   ];
 }
