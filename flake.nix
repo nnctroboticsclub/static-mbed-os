@@ -51,5 +51,57 @@
           mbedTarget = "NUCLEO_F303K8";
         };
       };
+
+      apps.${system} = {
+        test =
+          let
+            deriv = pkgs.stdenv.mkDerivation {
+              pname = "static-mbed-os-test";
+              version = "0.1.0";
+              src = ./test;
+
+              buildInputs = [
+                self.packages.${system}.static-mbed-os-f446re
+                pkgs.ninja
+              ];
+
+              unpackPhase = "true";
+
+              buildPhase = ''
+                mkdir tmp
+                cat > tmp/main.sh << EOF
+                #!/bin/sh
+                set -e
+
+                cd test # Relative to flake.nix
+
+                [ -d build ] || mkdir build
+                cd build
+                cmake -S .. -B . -G Ninja
+                make
+
+                EOF
+                chmod +x tmp/main.sh
+              '';
+
+              installPhase = ''
+                mkdir -p $out/bin
+                cp tmp/main.sh $out/main
+                cp $src/* $out/
+              '';
+
+              meta = with pkgs.lib; {
+                description = "Test application for static-mbed-os";
+                license = licenses.mit;
+                platforms = platforms.linux;
+              };
+            };
+          in
+          {
+            type = "app";
+            program = "${deriv}/main";
+          };
+      };
     };
+
 }

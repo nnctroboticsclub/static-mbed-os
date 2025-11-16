@@ -19,16 +19,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyca";
     repo = "cryptography";
-    rev = "${version}";
+    rev = version;
     hash = "sha256-3s8w9G4CcqM1v6kUiFmbirGD0qCO3OprXRgi7qh/W60=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    src = src + "/src/rust";
     hash = "sha256-fAVaNdSgHZAaaIUPoy87NaMMI/B9aZKvxIm/BSokSCs=";
-    sourceRoot = "${pname}-${version}/src/rust";
   };
+
+  cargoRoot = "src/rust";
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
@@ -42,13 +42,6 @@ buildPythonPackage rec {
   buildInputs = [ openssl ];
 
   propagatedBuildInputs = [ cffi ];
-
-  # Copy Cargo.lock from src/rust to root directory for cargoSetupHook
-  postUnpack = ''
-    if [ -f "source/src/rust/Cargo.lock" ]; then
-      cp "source/src/rust/Cargo.lock" "source/Cargo.lock"
-    fi
-  '';
 
   doCheck = false;
   doInstallCheck = false;

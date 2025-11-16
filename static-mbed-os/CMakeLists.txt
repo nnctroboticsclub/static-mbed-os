@@ -5,6 +5,8 @@ set(CMAKE_INSTALL_MESSAGE LAZY)
 set(MBED_APP_JSON_PATH mbed_app.json)
 set(MBED_TOOLCHAIN GCC_ARM)
 
+set(static_mbed_os_target_name "static-mbed-os-${MBED_TARGET}")
+
 include(TargetDumper)
 include(DependencyFinder)
 
@@ -21,20 +23,13 @@ message(STATUS "  - CMAKE_ASM_COMPILER: ${CMAKE_ASM_COMPILER}")
 project(static-mbed-os VERSION 1.0.2 LANGUAGES CXX)
 include(MbedCE)
 
-# ----- Target Installer
-include(CMakePackageConfigHelpers)
-
-
-# ----- Target Names
-set(static_mbed_os_target_name "static-mbed-os-${MBED_TARGET}")
-
-# ----- Target ${static_mbed_os_target_name}
+#* Target
 
 add_library(${static_mbed_os_target_name} STATIC mbed-os.cpp)
-target_link_libraries(${static_mbed_os_target_name} PUBLIC mbed-os)
+target_link_libraries(${static_mbed_os_target_name} PRIVATE mbed-os)
 
-# All includes
-
+#* Dump target info
+# Include files
 list_dep_targets(${static_mbed_os_target_name} mbed_os_dependencies)
 
 set(include_files "")
@@ -130,25 +125,34 @@ foreach(dep ${mbed_os_dependencies})
     foreach(dir ${dirs})
       install(
         DIRECTORY ${dir}
-        DESTINATION include/StaticMbedOS@${MBED_TARGET}
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
         FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
       )
     endforeach()
   endforeach()
 endforeach()
 
-# Unique include files
 list(REMOVE_DUPLICATES include_files)
 
-install(
-  FILES ${include_files}
-  DESTINATION include/StaticMbedOS@${MBED_TARGET}
-)
+#* Install
+set(STATIC_MBED_OS_INSTALL_NAME "StaticMbedOS-${MBED_TARGET}")
 
-# Install archive
+include(CMakePackageConfigHelpers)
+
+# Archive
 install(
   TARGETS ${static_mbed_os_target_name}
-  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+# Includes
+set(include_directories ${CMAKE_INSTALL_INCLUDEDIR})
+install(
+  FILES
+    ${include_files}
+    ${CMAKE_BINARY_DIR}/mbed-ce/generated-headers/mbed-target-config.h
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
 # Linker script
@@ -156,30 +160,17 @@ get_target_property(linker_script mbed-os LINKER_SCRIPT_PATH)
 set(linker_script_installation "${CMAKE_INSTALL_PREFIX}/share/cmake/StaticMbedOS@${MBED_TARGET}.ld")
 install(
   FILES ${linker_script}
-  DESTINATION share/cmake
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/cmake
   RENAME StaticMbedOS@${MBED_TARGET}.ld
 )
-#* CMake scripts
 
-# Generated config
-install(
-  DIRECTORY ${CMAKE_BINARY_DIR}/mbed-ce/generated-headers/mbed-target-config.h
-  DESTINATION include/StaticMbedOS@${MBED_TARGET}
-  FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
-)
-
-# ----- StaticMbedOSToolchain
+# Toolchain file
 get_target_property(compile_options_ mbed-os INTERFACE_COMPILE_OPTIONS)
 set(compile_options "")
 foreach(compile_option ${compile_options_})
-  string(REPLACE "${CMAKE_BINARY_DIR}/mbed-ce/generated-headers" "${CMAKE_INSTALL_PREFIX}/include/StaticMbedOS@${MBED_TARGET}" compile_option "${compile_option}")
+  string(REPLACE "${CMAKE_BINARY_DIR}/mbed-ce/generated-headers" "${CMAKE_INSTALL_INCLUDEDIR}" compile_option "${compile_option}")
   list(APPEND compile_options "${compile_option}")
 endforeach()
-
-
-set(include_directories
-  ${CMAKE_INSTALL_PREFIX}/include/StaticMbedOS@${MBED_TARGET}
-)
 
 get_target_property(compile_definitions mbed-os INTERFACE_COMPILE_DEFINITIONS)
 list(APPEND compile_definitions "__MBED__=1")
@@ -191,29 +182,9 @@ configure_file(
   @ONLY
 )
 
-
 install(
-  FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/StaticMbedOSToolchain-${MBED_TARGET}.cmake
-  DESTINATION share/cmake
+  FILES ${CMAKE_CURRENT_BINARY_DIR}/StaticMbedOSToolchain-${MBED_TARGET}.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake
 )
 
-#* CPack
-set(CPACK_VERBATIM_VARIABLES YES)
-set(CPACK_PACKAGE_NAME "StaticMbedOS-${MBED_TARGET}")
-set(CPACK_PACKAGE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/dist")
-set(CPACK_PACKAGE_CONTACT "syoch64@gmail.com")
-set(CPACK_GENERATOR "DEB;TGZ")
-
-# deb specific
-# MBED_TARGET_LOWER = MBED_TARGET.lower()
-string(TOLOWER ${MBED_TARGET} MBED_TARGET_LOWER)
-
-set(CPACK_DEBIAN_PACKAGE_NAME "static-mbed-os-${MBED_TARGET_LOWER}")
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "syoch")
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "static-mbed-os-core (>=1.0.0)")
-set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "StaticMbedOS for ${MBED_TARGET}")
-set(CPACK_DEBIAN_PACKAGE_SECTION "libs")
-
-include(InstallRequiredSystemLibraries)
-include(CPack)
+include(./cpack.cmake)
