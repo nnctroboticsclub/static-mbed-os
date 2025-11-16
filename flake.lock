@@ -1,0 +1,59 @@
+{
+  "nodes": {
+    "libs-cmake": {
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1763120407,
+        "narHash": "sha256-x+4eGbO9SATv2HMQ9Xemz/T3YzxwTwOI7lOmSkosvWY=",
+        "path": "/mnt/data/ghq/github.com/syoch/libs-dev/libs/libs-cmake",
+        "type": "path"
+      },
+      "original": {
+        "path": "/mnt/data/ghq/github.com/syoch/libs-dev/libs/libs-cmake",
+        "type": "path"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1759070547,
+        "narHash": "sha256-JVZl8NaVRYb0+381nl7LvPE+A774/dRpif01FKLrYFQ=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "647e5c14cbd5067f44ac86b74f014962df460840",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1718225733,
+        "narHash": "sha256-aTIpfLT+hQr0H1d7QA2k5a5rWrkL+M8ECN2tI9ClpSg=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "a9858885e197f984d92d7fe64e9fff6b2e488d40",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "a9858885e197f984d92d7fe64e9fff6b2e488d40",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "libs-cmake": "libs-cmake",
+        "nixpkgs": "nixpkgs_2"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

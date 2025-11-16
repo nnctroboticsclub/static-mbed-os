@@ -1,0 +1,10 @@
+--- a/setup.py
++++ b/setup.py
+@@ -36,7 +36,6 @@
+     packages=[package_name],
+     package_dir={package_name: 'src'},
+     install_requires=[
+-        'setuptools==69.5.1',
+         'cryptography==36.0.1',
+         'click==8.0.4',
+         'intelhex==2.3.0',

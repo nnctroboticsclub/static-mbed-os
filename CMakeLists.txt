@@ -1,20 +1,25 @@
 cmake_minimum_required(VERSION 3.19)
 cmake_policy(VERSION 3.19)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
-  /usr/arm-none-eabi/share/cmake
-  /usr/arm-none-eabi/lib/cmake
-)
 set(CMAKE_INSTALL_MESSAGE LAZY)
 set(MBED_APP_JSON_PATH mbed_app.json)
 set(MBED_TOOLCHAIN GCC_ARM)
 
 include(TargetDumper)
 include(DependencyFinder)
-include(MbedCE)
+
+include(GccArmToolchain)
+include(MbedCE-Toolchain)
+include(GccArmToolchain)
 string(REPLACE " -Wl,--cref" "" CMAKE_EXE_LINKER_FLAGS_INIT "${CMAKE_EXE_LINKER_FLAGS_INIT}")
 
+message(STATUS "Using Toolchain")
+message(STATUS "  - CMAKE_C_COMPILER: ${CMAKE_C_COMPILER}")
+message(STATUS "  - CMAKE_CXX_COMPILER: ${CMAKE_CXX_COMPILER}")
+message(STATUS "  - CMAKE_ASM_COMPILER: ${CMAKE_ASM_COMPILER}")
+
 project(static-mbed-os VERSION 1.0.2 LANGUAGES CXX)
+include(MbedCE)
 
 # ----- Target Installer
 include(CMakePackageConfigHelpers)

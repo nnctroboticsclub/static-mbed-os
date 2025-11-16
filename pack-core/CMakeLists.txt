@@ -9,7 +9,7 @@ project(static-mbed-os-core VERSION 1.0.1)
 install(
   FILES
     FindStaticMbedOS.cmake
-  DESTINATION share/cmake
+  DESTINATION lib/cmake
 )
 
 #* CPack
@@ -22,7 +22,7 @@ set(CPACK_GENERATOR "DEB;TGZ")
 # deb specific
 set(CPACK_DEBIAN_PACKAGE_NAME "static-mbed-os-core")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "syoch")
-set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "StaticMbedOS Core")
+set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "StaticMbedOS Core Components")
 set(CPACK_DEBIAN_PACKAGE_SECTION "libs")
 
 include(InstallRequiredSystemLibraries)
