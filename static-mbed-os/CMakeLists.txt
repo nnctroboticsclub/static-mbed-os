@@ -137,6 +137,7 @@ list(REMOVE_DUPLICATES include_files)
 #* Install
 set(STATIC_MBED_OS_INSTALL_NAME "StaticMbedOS-${MBED_TARGET}")
 
+include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
 # Archive

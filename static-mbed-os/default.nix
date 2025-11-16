@@ -37,6 +37,12 @@ stdenv.mkDerivation {
       "-DMBED_CREATE_PYTHON_VENV=OFF"
     ];
 
+  cmakeBuildInputs = [
+    gcc-arm-toolchain
+    libs-cmake
+    mbed-os
+  ];
+
   nativeBuildInputs = [
     cmake
     libs-cmake
