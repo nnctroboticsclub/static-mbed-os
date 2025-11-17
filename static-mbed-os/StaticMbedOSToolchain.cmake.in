@@ -58,6 +58,9 @@ endif()
 
 if(NOT TARGET StaticMbedOS)
   add_library(StaticMbedOS INTERFACE IMPORTED)
+  set_target_properties(StaticMbedOS PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "@include_directories@"
+  )
   target_link_libraries(StaticMbedOS INTERFACE StaticMbedOS_)
   target_link_options(StaticMbedOS INTERFACE "SHELL:-Wl,--whole-archive $<TARGET_FILE:StaticMbedOS_> -Wl,--no-whole-archive")
 endif()

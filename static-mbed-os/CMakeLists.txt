@@ -148,7 +148,7 @@ install(
 )
 
 # Includes
-set(include_directories ${CMAKE_INSTALL_INCLUDEDIR})
+set(include_directories "\$\{CMAKE_CURRENT_LIST_DIR\}/../../include")
 install(
   FILES
     ${include_files}

@@ -53,4 +53,16 @@ stdenv.mkDerivation {
   buildInputs = [
     static-mbed-os-core
   ];
+
+  propagatedBuildInputs = [
+    gcc-arm-toolchain
+    libs-cmake
+    mbed-os
+  ];
+
+  # Ensure that dependent packages can find the CMake modules
+  postInstall = ''
+    mkdir -p $out/nix-support
+    echo "export CMAKE_MODULE_PATH=\''${CMAKE_MODULE_PATH:+\$CMAKE_MODULE_PATH:}$out/lib/cmake" >> $out/nix-support/setup-hook
+  '';
 }
