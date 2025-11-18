@@ -25,7 +25,7 @@ set(CMAKE_CXX_USE_RESPONSE_FILE_FOR_LIBRARIES 1)
 include(GccArmToolchain)
 
 #* ------ Standard Configuration ------
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD @CMAKE_C_STANDARD@)
 set(CMAKE_C_EXTENSIONS FALSE)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_EXTENSIONS FALSE)
@@ -36,38 +36,5 @@ set(CMAKE_CXX_FLAGS "@CMAKE_CXX_FLAGS_INIT@")
 set(CMAKE_ASM_FLAGS "@CMAKE_ASM_FLAGS_INIT@")
 set(CMAKE_EXE_LINKER_FLAGS "@CMAKE_EXE_LINKER_FLAGS_INIT@")
 
-#* ------ Include UseStaticMbedOS ------
-if (NOT TARGET StaticMbedOS_)
-  add_library(StaticMbedOS_ UNKNOWN IMPORTED)
-  # MbedOS-like library should be satisfied the following conditions:
-  # - good INTERFACE_COMPILE_OPTIONS
-  # - good INTERFACE_DEFINITIONS
-  # - good INTERFACE_INCLUDE_DIRECTORIES
-  # for link, it should satisfy the following conditions:
-  # - good INTERFACE_LINK_OPTIONS
-  # - has good .a file
-  set_target_properties(StaticMbedOS_ PROPERTIES
-    IMPORTED_LINK_INTERFACE_LANGUAGES "CXX"
-    IMPORTED_LOCATION "@CMAKE_INSTALL_PREFIX@/lib/libstatic-mbed-os-@MBED_TARGET@.a"
-    INTERFACE_COMPILE_OPTIONS "@compile_options@"
-    INTERFACE_INCLUDE_DIRECTORIES "@include_directories@"
-    INTERFACE_COMPILE_DEFINITIONS "@compile_definitions@"
-    INTERFACE_LINK_OPTIONS "@link_options@"
-  )
-endif()
-
-if(NOT TARGET StaticMbedOS)
-  add_library(StaticMbedOS INTERFACE IMPORTED)
-  set_target_properties(StaticMbedOS PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "@include_directories@"
-  )
-  target_link_libraries(StaticMbedOS INTERFACE StaticMbedOS_)
-  target_link_options(StaticMbedOS INTERFACE "SHELL:-Wl,--whole-archive $<TARGET_FILE:StaticMbedOS_> -Wl,--no-whole-archive")
-endif()
-
-
-function(static_mbed_os_app_target target)
-  target_link_options(${target} PRIVATE "-T" "@linker_script_installation@")
-  set_property(TARGET ${target} APPEND PROPERTY LINK_DEPENDS "@linker_script_installation@")
-
-endfunction()
+#* StaticMbedOS
+include(StaticMbedOS-@MBED_TARGET@Config)

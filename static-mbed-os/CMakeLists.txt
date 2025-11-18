@@ -148,7 +148,7 @@ install(
 )
 
 # Includes
-set(include_directories "\$\{CMAKE_CURRENT_LIST_DIR\}/../../include")
+set(include_directories ${CMAKE_INSTALL_INCLUDEDIR})
 install(
   FILES
     ${include_files}
@@ -183,8 +183,16 @@ configure_file(
   @ONLY
 )
 
+configure_package_config_file(
+  StaticMbedOSConfig.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/StaticMbedOS-${MBED_TARGET}Config.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake
+)
+
 install(
-  FILES ${CMAKE_CURRENT_BINARY_DIR}/StaticMbedOSToolchain-${MBED_TARGET}.cmake
+  FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/StaticMbedOSToolchain-${MBED_TARGET}.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/StaticMbedOS-${MBED_TARGET}Config.cmake
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake
 )
 
